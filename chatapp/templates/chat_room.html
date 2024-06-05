@@ -1,0 +1,216 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <style>
+        :root {
+            --text-color: white;
+            
+            --primary-color: #5ddcff;
+        }
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            max-width: 100%;
+            margin: 0 auto;
+            z-index:1;
+        }
+        .stars{
+            z-index:2;
+            pointer-events: none;
+        }
+        
+        
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="stars">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+      </div>
+    <div class="content">
+        
+        <a href="{% url 'home' %}" class="home-link">Home</a>
+    </div>
+
+    <div class="chat-container">
+        <div class="sidebar">
+            <h2>Chat Rooms</h2>
+            {% for room in rooms %}
+                <div class="chat-room">
+                    {% if room.room_image %}
+                        <img class="room-image" src="{{ room.room_image.url }}" alt="{{ room.name }}">
+                    {% else %}
+                        <div class="room-image" style="background-color: #ccc;"></div>
+                    {% endif %}
+                    <a class="room-name" href="{% url 'chat_room' room.id %}">{{ room.name }}</a>
+                    <form action="{% url 'delete_chat_room' room.id %}" method="post">
+                        {% csrf_token %}
+                        {% if room.created_by == request.user %}
+                            <button type="submit" class="delete-room-btn"><i class="fas fa-trash"></i></button>
+                        {% else %}
+                            <button type="button" class="disabled-btn" disabled><i class="fas fa-trash"></i></button>
+                        {% endif %}
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="chat-main">
+            {% if room %}
+                <div class="room-header">
+                    {% if room.room_image %}
+                        <div class="room-image-container">
+                            <img class="room-image" src="{{ room.room_image.url }}" alt="{{ room.name }}">
+                        </div>
+                    {% else %}
+                        <div class="room-image-container" style="background-color: #fff;"></div>
+                    {% endif %}
+                    <h2 class="room-text">{{ room.name }}</h2>
+                </div>
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message">
+                            <div class="d-flex">
+                                <img src="{{ message.sender.profile.image.url }}" class="rounded-circle user_img_msg" alt="{{ message.sender.username }}">
+                                <div class="ml-2">
+                                    <strong class="d-head-text">{{ message.sender.username }}</strong>
+                                    <p class="d-text">{{ message.content }}</p>
+                                    <small class="d-small-text">{{ message.timestamp }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <form method="post" action="{% url 'chat_room' room.id %}" class="send-message">
+                    {% csrf_token %}
+                    <textarea name="content" placeholder="Type your message here..."></textarea>
+                    <button type="submit">Send</button>
+                </form>
+                
+            {% else %}
+                <div class="room-placeholder">
+                    <h3>Select a chat room to start messaging</h3>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function(){
+        var messageCounter = 0;
+
+        $('.send-message').on('submit', function(e){
+            e.preventDefault();
+            var content = $('textarea[name="content"]').val();
+            var room_id = '{{ room.id }}';
+            $.ajax({
+                type: 'POST',
+                url: '',
+                data: {
+                    'content': content,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response){
+                    var message_html = '<div class="message">' +
+                        '<div class="d-flex">' +
+                        '<img src="' + response.profile_image + '" class="rounded-circle user_img_msg" alt="' + response.sender + '" width="40" height="40">' +
+                        '<div class="ml-2">' +
+                        '<strong>' + response.sender + '</strong>' +
+                        '<p>' + response.content + '</p>' +
+                        '<small>' + response.timestamp + '</small>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                    $('.messages').append(message_html);
+                    $('textarea[name="content"]').val('');
+                    scrollToBottom();
+
+                    messageCounter++; // Increment message counter
+
+                    if (messageCounter >= 1) {
+                        // Reload the page after 5 messages
+                        location.reload();
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        // إضافة استماع لحدث keydown في textarea
+        $('textarea[name="content"]').on('keydown', function(e){
+            if(e.key === "Enter" && !e.shiftKey){
+                e.preventDefault();
+                $('.send-message').submit();
+            }
+        });
+
+        // دالة للتمرير لأسفل
+        function scrollToBottom(){
+            var messagesContainer = $('.messages');
+            messagesContainer.scrollTop(messagesContainer.prop("scrollHeight"));
+        }
+
+        // تمرير لأسفل عند التحميل الأولي
+        scrollToBottom();
+    });
+</script>
+</html>

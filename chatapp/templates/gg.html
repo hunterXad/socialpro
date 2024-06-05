@@ -1,0 +1,379 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <style>
+        :root {
+            --text-color: white;
+        }
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            max-width: 100%;
+            margin: 0 auto;
+            z-index:1;
+        }
+        .stars{
+            z-index:2;
+            pointer-events: none;
+        }
+        .chat-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+          }
+          .sidebar {
+            width: 25%;
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px;
+            overflow-y: auto;
+          }
+          .sidebar .chat-room {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+          }
+          .sidebar .chat-room:hover {
+            background-color: #495057;
+          }
+          .sidebar .chat-room img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+          }
+          .sidebar .chat-room a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+          }
+          .sidebar .chat-room form {
+            margin-left: auto;
+          }
+          .sidebar .chat-room .delete-room-btn {
+            background: none;
+            border: none;
+            color: #ff0000;
+            cursor: pointer;
+          }
+          .sidebar .chat-room .disabled-btn {
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: not-allowed;
+          }
+          .chat-main {
+            width: 75%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+          }
+          .messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+          }
+          .messages::-webkit-scrollbar {
+            display: none;
+          }
+          .messages .message {
+            margin-bottom: 15px;
+            background-color: #212529;
+            padding: 10px;
+            border-radius: 5px;
+          }
+          .send-message {
+            display: flex;
+          }
+          .send-message textarea {
+            flex-grow: 1;
+            resize: none;
+            padding: 10px;
+            border: 1px solid #495057;
+            border-radius: 5px;
+            background-color: #343a40;
+            color: #fff;
+          }
+          .send-message button {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+          }
+          .room-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+          }
+          .room-image-container {
+            width: 5rem; 
+            height: 5rem;
+            border-radius: 50%; 
+            overflow: hidden; 
+            margin:1rem ; 
+            margin-right:2rem;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75); 
+          }
+          .room-image {
+            width: 100%;
+            height: auto;
+            display: block; 
+          }
+          .room-text {
+            font-size: 2.5rem;
+            color: var(--text-color);
+            text-shadow: -2px -2px 0 #0000cc, 2px -2px 0 #0000cc, -2px 2px 0 #0000cc, 2px 2px 0 #0000cc;
+          }
+          
+          .d-text {
+            font-size: 1em;
+            color: var(--text-color);
+            margin-left: 2rem;
+            max-width: 70%;
+            overflow: hidden;
+            word-wrap: break-word;
+          }
+          .d-flex {
+            margin-top: 2rem;
+          }
+          .d-head-text {
+            font-size: 1.5em;
+            color: var(--text-color);
+            text-shadow: -2px -2px 0 #0000cc, 2px -2px 0 #0000cc, -2px 2px 0 #0000cc, 2px 2px 0 #0000cc;
+          }
+          
+          img {
+            width: 50px;
+            height: 50px;
+          }
+          .d-small-text {
+            color: var(--text-color);
+          }
+          .ml-2 {
+            max-width: 90%;
+          }
+          /* styles.css */
+          .home-link {
+            position: fixed; /* جعل الرابط عائمًا */
+            top: 20px; /* تحديد المسافة من الأعلى */
+            right: 20px; /* تحديد المسافة من اليمين */
+            background-color: #007bff; /* لون الخلفية */
+            color: white; /* لون النص */
+            text-decoration: none; /* إزالة التأثير الأساسي للرابط */
+            font-weight: bold; /* جعل النص عريضًا */
+            border: none; /* إزالة حدود الزر */
+            padding: 10px 20px; /* تحديد هوامش النص */
+            border-radius: 5px; /* تحديد شكل الزوايا */
+            transition: all 0.3s ease; /* إضافة تأثير الانتقال */
+            z-index: 999; /* تحديد ترتيب الطبقة للرابط فوق العناصر الأخرى */
+          }
+          
+          .home-link:hover {
+            background-color: #0056b3; /* تغيير لون الخلفية عند تحويل الماوس */
+            transform: scale(1.1); /* تكبير الزر عند تحويل الماوس */
+          }
+          
+        
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="stars">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+      </div>
+    <div class="content">
+        
+        <a href="{% url 'home' %}" class="home-link">Home</a>
+    </div>
+
+    <div class="chat-container">
+        <div class="sidebar">
+            <h2>Chat Rooms</h2>
+            {% for room in rooms %}
+                <div class="chat-room">
+                    {% if room.room_image %}
+                        <img class="room-image" src="{{ room.room_image.url }}" alt="{{ room.name }}">
+                    {% else %}
+                        <div class="room-image" style="background-color: #ccc;"></div>
+                    {% endif %}
+                    <a class="room-name" href="{% url 'chat_room' room.id %}">{{ room.name }}</a>
+                    <form action="{% url 'delete_chat_room' room.id %}" method="post">
+                        {% csrf_token %}
+                        {% if room.created_by == request.user %}
+                            <button type="submit" class="delete-room-btn"><i class="fas fa-trash"></i></button>
+                        {% else %}
+                            <button type="button" class="disabled-btn" disabled><i class="fas fa-trash"></i></button>
+                        {% endif %}
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="chat-main">
+            {% if room %}
+                <div class="room-header">
+                    {% if room.room_image %}
+                        <div class="room-image-container">
+                            <img class="room-image" src="{{ room.room_image.url }}" alt="{{ room.name }}">
+                        </div>
+                    {% else %}
+                        <div class="room-image-container" style="background-color: #fff;"></div>
+                    {% endif %}
+                    <h2 class="room-text">{{ room.name }}</h2>
+                </div>
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message">
+                            <div class="d-flex">
+                                <img src="{{ message.sender.profile.image.url }}" class="rounded-circle user_img_msg" alt="{{ message.sender.username }}">
+                                <div class="ml-2">
+                                    <strong class="d-head-text">{{ message.sender.username }}</strong>
+                                    <p class="d-text">{{ message.content }}</p>
+                                    <small class="d-small-text">{{ message.timestamp }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <form method="post" action="{% url 'chat_room' room.id %}" class="send-message">
+                    {% csrf_token %}
+                    <textarea name="content" placeholder="Type your message here..."></textarea>
+                    <button type="submit">Send</button>
+                </form>
+                
+            {% else %}
+                <div class="room-placeholder">
+                    <h3>Select a chat room to start messaging</h3>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function(){
+        var messageCounter = 0;
+
+        $('.send-message').on('submit', function(e){
+            e.preventDefault();
+            var content = $('textarea[name="content"]').val();
+            var room_id = '{{ room.id }}';
+            $.ajax({
+                type: 'POST',
+                url: '',
+                data: {
+                    'content': content,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response){
+                    var message_html = '<div class="message">' +
+                        '<div class="d-flex">' +
+                        '<img src="' + response.profile_image + '" class="rounded-circle user_img_msg" alt="' + response.sender + '" width="40" height="40">' +
+                        '<div class="ml-2">' +
+                        '<strong>' + response.sender + '</strong>' +
+                        '<p>' + response.content + '</p>' +
+                        '<small>' + response.timestamp + '</small>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                    $('.messages').append(message_html);
+                    $('textarea[name="content"]').val('');
+                    scrollToBottom();
+
+                    messageCounter++; // Increment message counter
+
+                    if (messageCounter >= 1) {
+                        // Reload the page after 5 messages
+                        location.reload();
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        // إضافة استماع لحدث keydown في textarea
+        $('textarea[name="content"]').on('keydown', function(e){
+            if(e.key === "Enter" && !e.shiftKey){
+                e.preventDefault();
+                $('.send-message').submit();
+            }
+        });
+
+        // دالة للتمرير لأسفل
+        function scrollToBottom(){
+            var messagesContainer = $('.messages');
+            messagesContainer.scrollTop(messagesContainer.prop("scrollHeight"));
+        }
+
+        // تمرير لأسفل عند التحميل الأولي
+        scrollToBottom();
+    });
+</script>
+</html>

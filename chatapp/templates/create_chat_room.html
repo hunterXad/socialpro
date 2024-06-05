@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Chat Room</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <style>
+        /* CSS Styles */
+        :root {
+            --primary-color: #5ddcff;
+            --secondary-color: #0056b3; /* Secondary color */
+            --text-color: #fff; /* Text color */
+            --form-background-color: #343a40; /* Form background color */
+            --form-border-color: #495057; /* Form border color */
+            --form-border-radius: 5px; /* Form border radius */
+            --button-hover-color: #0056b3; /* Button hover color */
+        }
+
+        /* Body and HTML */
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            max-width: 100%;
+            margin: 0 auto;
+            z-index:1;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Container */
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            justify-content: center;
+            align-items: center;
+            background-color: black; /* Background color */
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 90%;
+            max-width: 500px;
+            background-color: var(--form-background-color);
+            border-radius: var(--form-border-radius);
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            z-index: 1;
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            color: var(--text-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid var(--form-border-color);
+            border-radius: var(--form-border-radius);
+            background-color: var(--form-background-color);
+            color: var(--text-color);
+            margin-top: 5px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: var(--form-border-radius);
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--button-hover-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="stars">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+      </div>
+    <div class="content">
+        
+        <a href="{% url 'home' %}" class="home-link">Home</a>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Form Container -->
+        <div class="form-container">
+            <!-- Title -->
+            <h2>Create Chat Room</h2>
+            <!-- Form -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- Form Group - Room Name -->
+                <div class="form-group">
+                    <label for="id_name">Room Name:</label>
+                    <input type="text" id="id_name" name="name" placeholder="Enter room name">
+                </div>
+                <!-- Form Group - Room Image -->
+                <div class="form-group">
+                    <label for="id_room_image">Room Image:</label>
+                    <input type="file" id="id_room_image" name="room_image">
+                </div>
+                <!-- Submit Button -->
+                <button type="submit">Create</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

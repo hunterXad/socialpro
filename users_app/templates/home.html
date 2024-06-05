@@ -1,0 +1,166 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en"> 
+<head> 
+  <meta charset="UTF-8"> 
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+  <title>Animated Login Form</title> 
+  
+  <style>
+    body {
+        display: flex;
+        justify-content: center;
+        
+        min-height: 100vh;
+        background: radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%);
+        overflow: hidden;
+      }
+      
+      @media screen and (max-width: 750px) {
+        .star {
+          animation: fall var(--fall-duration) var(--fall-delay) linear infinite;
+        }
+      }
+      
+      
+      :root {
+        --glow-color: hsl(186 100% 69%);
+        --primary-color: #5ddcff;
+      }
+      
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800;900&display=swap');
+
+      .button-container {
+        
+        border-bottom: none; 
+    
+      }
+      .container_but_main {
+        display: flex;
+        flex-direction: row;
+    }
+    
+</style>
+</head> 
+
+<body> 
+    <div class="stars">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+      </div>
+
+      <div class="button-container">
+        
+        <form method="post" action="{% url 'signup' %}">
+          {% csrf_token %}
+          <button type="submit" class='glowing-btn'>signup</button>
+        </form>
+        
+        
+        <form method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          <button type="submit" class='glowing-btn'>LOGin</button>
+        </form>
+        
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class='glowing-btn'>LOGOUT</button>
+        </form>
+        
+      </div>
+      <span class="title_hi"><span>welcome </span>in <span>mywebsite</span></span>
+      
+      <div class="container_but_main">
+      <div class="container_but">
+        <a class="button_do" href="post/" style="--color:#1e9bff;">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          POST
+        </a>
+        <a class="button_do" href="add/" style="--color: #80B6F5;">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          ADD POST
+        </a>
+     
+      </div>
+      <div class="container_but">
+        <a class="button_do" href="rooms/" style="--color:#1e9bff;">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          ROOMS
+        </a>
+        <a class="button_do" href="create/" style="--color: #80B6F5;">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          CREATE ROOM
+        </a>
+     
+      </div>
+    </div>
+      
+</body>
+</html>
